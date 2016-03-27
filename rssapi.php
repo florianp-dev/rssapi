@@ -2,12 +2,14 @@
 
 class RSSAPI {
 
-	public function unmarshal($flux) {
-		if (!is_string($flux)) {
+	public function unmarshal($flux_url) {
+		if (!is_string($flux_url)) {
 			throw new InvalidArgumentException('Argument must be a string');
+		} elseif (!filter_var($flux_url, FILTER_VALIDATE_URL)) {
+			throw new InvalidArgumentException('URL is not well formed');
 		}
 
-		$rss = new SimpleXMLElement($flux, 0, true);
+		$rss = new SimpleXMLElement($flux_url, 0, true);
 
 		// Title of RSS document
 		$unmarshalled['title'] = $rss->channel->title;
