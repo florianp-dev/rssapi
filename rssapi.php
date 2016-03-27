@@ -2,6 +2,11 @@
 
 class RSSAPI {
 
+	/**
+	 * Unserializes document if it is proper XML file
+	 * @param $flux_url The URL of the document
+	 * @return Array Contains all informations about the RSS flow
+	 */
 	public function unmarshal($flux_url) {
 		$rss = new SimpleXMLElement($flux_url, 0, true);
 
