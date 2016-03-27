@@ -1,20 +1,29 @@
 <?php
 
-$xmlstr = file_get_contents('http://korben.info/feed');
+class RSSAPI {
 
-$rss = new SimpleXMLElement($xmlstr);
+	public function unmarshal($flux) {
+		if (!is_string($flux)) {
+			throw new InvalidArgumentException('Argument must be a string');
+		}
 
-// Titre du flux
-echo '<strong>' . $rss->channel->title . '</strong> - ' . '<em>' . $rss->channel->description . '</em>';
+		$rss = new SimpleXMLElement($flux, 0, true);
 
-echo '<br />' . '<br />';
+		// Title of RSS document
+		$unmarshalled['title'] = $rss->channel->title;
+		// Description of RSS document
+		$unmarshalled['desc'] = $rss->channel->description;
 
-// Détails de chaque news présente
-foreach ($rss->channel->item as $item) {
-	// Titre
-	echo '<strong>Titre</strong> :' . $item->title . '<br />';
-	// Description
-	echo '<em>Descri</em> : ' . $item->description;
-	// Lien
-	echo '<a href="#">' . $item->link . '</a><br /><br />';
+		// Details of each item
+		foreach ($rss->channel->item as $item) {
+			// Title
+			$unmarshalled['items']['title'] = $item->title;
+			// Description
+			$unmarshalled['items']['desc'] = $item->description;
+			// Link
+			$unmarshalled['items']['link'] = $item->link;
+		}
+
+		return $unmarshalled;
+	}
 }
