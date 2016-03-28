@@ -20,6 +20,13 @@ class RSSAPI {
 		// Link to relative article
 		$unmarshalled['link'] = $rss->channel->link;
 
+		if (empty($unmarshalled['title'])
+			|| empty($unmarshalled['description'])
+			|| empty($unmarshalled['link']))
+		{
+			// TODO Remplir une variable pour prévenir de la malformation
+		}
+
 		/* Optionnal elements (only set if exists) */
 		if ($rss->channel->language)
 			$unmarshalled['language'] = $rss->channel->language->__toString();
@@ -46,6 +53,10 @@ class RSSAPI {
 
 		// Details of each item
 		foreach ($rss->channel->item as $item) {
+			if (empty($item->title) && empty($item->description)) {
+				// TODO Remplir une variable pour prévenir de la malformation
+			}
+
 			// Title
 			$unmarshalled['items']['title'] = $item->title;
 			// Description
