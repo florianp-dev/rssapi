@@ -9,13 +9,23 @@ echo $unmarsh['title'] . ' - ' . $unmarsh['description'] . ' : ' . $unmarsh['lin
 
 echo '<br />';
 
+echo $unmarsh['language'];
+
+echo '<br />';
+
+foreach ($unmarsh['items'] as $entry) {
+	echo $entry['title'] . '<br />';
+}
+
+echo '<br />';
+
 // Errors detection about RSS2.0 specifications
 if (isset($rssErrors)) {
-  foreach ($$rssErrors as $error) {
-    echo $error . '<br />';
-  }
+	foreach ($$rssErrors as $error) {
+		echo $error . '<br />';
+	}
 } else {
-  echo 'No error detected <br />';
+	echo 'No error detected <br />';
 }
 
 // Bad way that throws an InvalidArgumentExcetion
