@@ -24,7 +24,7 @@ class RSSAPI {
 			|| empty($unmarshalled['description'])
 			|| empty($unmarshalled['link']))
 		{
-			// TODO Remplir une variable pour prévenir de la malformation
+			$rssErrors[] = 'One of unavoidable element of the channel is not present';
 		}
 
 		/* Optionnal elements (only set if exists) */
@@ -54,7 +54,7 @@ class RSSAPI {
 		// Details of each item
 		foreach ($rss->channel->item as $item) {
 			if (empty($item->title) && empty($item->description)) {
-				// TODO Remplir une variable pour prévenir de la malformation
+				$rssErrors[] = 'One of unavoidable element of the item is not present';
 			}
 
 			// Title

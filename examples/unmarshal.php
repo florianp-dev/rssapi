@@ -1,5 +1,5 @@
 <?php
-require_once "../rssapi.php";
+require_once '../rssapi.php';
 
 $rssapi = new RSSAPI;
 
@@ -9,5 +9,14 @@ echo $unmarsh['title'] . ' - ' . $unmarsh['description'] . ' : ' . $unmarsh['lin
 
 echo '<br />';
 
-// Bad way that throws InvalidArgumentExcetion
+// Errors detection about RSS2.0 specifications
+if (isset($rssErrors)) {
+  foreach ($$rssErrors as $error) {
+    echo $error . '<br />';
+  }
+} else {
+  echo 'No error detected <br />';
+}
+
+// Bad way that throws an InvalidArgumentExcetion
 $rssapi->unmarshal(123);
