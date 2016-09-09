@@ -2,6 +2,9 @@
 
 class RSSAPI {
 
+	/* Array that contains data from RSS */
+	private $unmarshalled;
+
 	/**
 	 * Unserializes document if it is proper XML file
 	 * @param $flux_url String URL of the document
@@ -14,21 +17,21 @@ class RSSAPI {
 
 		/* Unavoidable elements */
 		// Title of RSS document
-		$unmarshalled['title'] = $rss->channel->title;
+		$this->unmarshalled['title'] = $rss->channel->title;
 		// Description of RSS document
-		$unmarshalled['description'] = $rss->channel->description;
+		$this->unmarshalled['description'] = $rss->channel->description;
 		// Link to relative article
-		$unmarshalled['link'] = $rss->channel->link;
+		$this->unmarshalled['link'] = $rss->channel->link;
 
-		if (empty($unmarshalled['title'])
-			|| empty($unmarshalled['description'])
-			|| empty($unmarshalled['link']))
+		if (empty($this->unmarshalled['title'])
+			|| empty($this->unmarshalled['description'])
+			|| empty($this->unmarshalled['link']))
 		{
 			$rssErrors[] = 'One of unavoidable element of the channel is not present';
 		}
 
 		/* Optionnal elements (only set if exists) */
-		$this->checkOptionnalsChannel($rss, $unmarshalled);
+		$this->checkOptionnalsChannel($rss, $this->unmarshalled);
 
 		// Details of each item
 		$index = 0;
@@ -38,15 +41,22 @@ class RSSAPI {
 			}
 
 			if (!empty($item->title))
-				$unmarshalled['items'][$index]['title'] = $item->title;
+				$this->unmarshalled['items'][$index]['title'] = $item->title;
 			else
-				$unmarshalled['items'][$index]['desc'] = $item->description;
+				$this->unmarshalled['items'][$index]['desc'] = $item->description;
 
-			$this->checkOptionnalsItem($item, $unmarshalled, $index);
+			$this->checkOptionnalsItem($item, $this->unmarshalled, $index);
 			$index++;
 		}
 
-		return $unmarshalled;
+		return $this->unmarshalled;
+	}
+
+	/**
+	* Returns contained keys in the final array
+	*/
+	public function available_keys() {
+		return array_keys($this->unmarshalled);
 	}
 
 	private function check_integrity($to_check) {
@@ -103,4 +113,9 @@ class RSSAPI {
 		if ($item->pubDate)
 			$unmarsh['items'][$index]['pubDate'] = $item->pubDate->__toString();
 	}
+
+	public function getResultArray() {
+		return $this->unmarshalled;
+	}
+
 }
